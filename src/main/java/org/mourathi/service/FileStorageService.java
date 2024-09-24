@@ -88,6 +88,7 @@ public class FileStorageService implements IFileStorageService {
 
     @Override
     public FileMetadata updateFileMetadata(FileMetadata fileMetadata, String objectId) {
+        fileMetadata.setUpdated(new Date());
         fileRepository.save(fileMetadata);
         return fileMetadata;
     }

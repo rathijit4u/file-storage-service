@@ -17,6 +17,8 @@ dependencies {
     implementation("io.minio:minio:8.5.12")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.3.3")
     implementation("org.postgresql:postgresql:42.7.4")
+    implementation("org.springframework.boot:spring-boot-starter-security:3.3.3")
+    implementation("com.google.code.gson:gson:2.10.1")
 
 
     compileOnly("org.projectlombok:lombok:1.18.34")
@@ -31,6 +33,6 @@ tasks.test {
 
 tasks.withType<Jar> {
     manifest {
-        attributes["Main-Class"] = "org.mourathi.NatsPublisher"
+        attributes["Main-Class"] = "org.mourathi.FileStorage"
     }
 }

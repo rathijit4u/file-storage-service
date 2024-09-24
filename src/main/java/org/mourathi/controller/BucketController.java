@@ -1,6 +1,7 @@
 package org.mourathi.controller;
 
 import io.minio.messages.Bucket;
+import org.mourathi.service.FSUserDetailsService;
 import org.mourathi.service.IBucketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

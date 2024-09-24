@@ -1,5 +1,6 @@
 package org.mourathi.exception;
 
+import com.google.gson.Gson;
 import java.util.Date;
 
 public class ExceptionDetails {
@@ -9,7 +10,7 @@ public class ExceptionDetails {
     private String details;
 
     public ExceptionDetails(Date timestamp, String message, String details) {
-        this.timestamp = timestamp;
+        this.setTimestamp(timestamp);
         this.message = message;
         this.details = details;
     }
@@ -36,5 +37,10 @@ public class ExceptionDetails {
 
     public void setDetails(String details) {
         this.details = details;
+    }
+
+    public String getJSON(){
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 }
