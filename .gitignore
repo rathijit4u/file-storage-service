@@ -1,3 +1,5 @@
 build/
 logs/
 .gradle/
+.idea/
+.gradle/8.8/checksums/checksums.lock

@@ -1,0 +1,3 @@
+CREATE USER docker_user WITH PASSWORD 'docker_user';
+
+GRANT ALL PRIVILEGES ON DATABASE file_metadata TO docker_user;

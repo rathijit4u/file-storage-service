@@ -2,6 +2,7 @@ package org.mourathi.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.mourathi.auth.ApiKeyAuthentication;
+import org.mourathi.model.APIKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -19,10 +20,16 @@ public class AuthenticationService {
 
     public Authentication getAuthentication(HttpServletRequest request) {
         String apiKey = request.getHeader(AUTH_TOKEN_HEADER_NAME);
-        if (apiKey == null || !apiKey.equals(System.getenv(AUTH_TOKEN))) {
-            throw new BadCredentialsException("Invalid API Key");
+
+        if (apiKey == null) {
+            throw new BadCredentialsException("Missing API Key");
+        } else {
+            APIKey apiKeyDbValue = apiKeyService.findApiKey(apiKey);
+            if(apiKeyDbValue == null || !apiKey.equals(apiKeyDbValue.getKey())){
+                throw new BadCredentialsException("Invalid API Key");
+            }
         }
-        apiKeyService.findApiKey(apiKey);
+
         return new ApiKeyAuthentication(apiKey, AuthorityUtils.NO_AUTHORITIES);
     }
 }
