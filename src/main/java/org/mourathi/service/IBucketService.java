@@ -1,6 +1,7 @@
 package org.mourathi.service;
 
 import io.minio.messages.Bucket;
+import org.mourathi.dto.BucketDto;
 
 import java.util.List;
 
@@ -9,5 +10,5 @@ public interface IBucketService {
 
     void deleteBucket(String name);
 
-    List<Bucket> getAllBuckets();
+    List<BucketDto> getAllBuckets();
 }

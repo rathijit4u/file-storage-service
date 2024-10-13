@@ -155,7 +155,15 @@ public class MinIOStorageUtil {
     public void removeBucket(String name) {
         try {
             minioClient.removeBucket(RemoveBucketArgs.builder().bucket(name).build());
-        } catch (ErrorResponseException | XmlParserException | ServerException | NoSuchAlgorithmException |
+        } catch(ErrorResponseException erx){
+            if(erx.errorResponse().code().equalsIgnoreCase("NoSuchBucket")){
+                throw new RuntimeException(erx.getLocalizedMessage()
+                        + ". Bucket name = " + erx.errorResponse().bucketName());
+            } else {
+                throw new RuntimeException(erx.getLocalizedMessage());
+            }
+        }
+        catch (XmlParserException | ServerException | NoSuchAlgorithmException |
                  IOException | InvalidResponseException | InvalidKeyException | InternalException |
                  InsufficientDataException e) {
             throw new RuntimeException(e);

@@ -1,6 +1,7 @@
 package org.mourathi.controller;
 
 import io.minio.messages.Bucket;
+import org.mourathi.dto.BucketDto;
 import org.mourathi.service.FSUserDetailsService;
 import org.mourathi.service.IBucketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class BucketController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Bucket>> getAllBuckets(){
+    public ResponseEntity<List<BucketDto>> getAllBuckets(){
         return ResponseEntity.ok(iBucketService.getAllBuckets());
     }
 }
