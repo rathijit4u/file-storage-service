@@ -9,12 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +27,10 @@ public class FileObjectController {
 
 
     @PostMapping("/{bucket}/upload")
-    @ResponseStatus(HttpStatus.CREATED)
-    public FileDto uploadSingleFile(HttpServletRequest request, @PathVariable("bucket") String bucket
+    public ResponseEntity<FileDto> uploadSingleFile(HttpServletRequest request, @PathVariable("bucket") String bucket
             , @RequestParam("file") MultipartFile file) throws IOException {
-        return getFileDto(request, bucket, file);
+        return ResponseEntity.accepted()
+                .body(getFileDto(request, bucket, file));
     }
 
     @PostMapping("/{bucket}/bulkupload")
@@ -74,7 +72,6 @@ public class FileObjectController {
                                                       @PathVariable("objectId") String objectId) {
         FileMetadata fileMetadata = fileStorageService.getFileMetadata(fileDto.getId());
         fileMetadata.setFileType(fileDto.getFileType());
-        fileMetadata.seteTag(fileDto.geteTag());
         fileMetadata.setFileName(fileDto.getFileName());
         fileMetadata.setFileSize(fileDto.getFileSize());
         fileMetadata.setDownloadLink(fileDto.getDownloadLink());
@@ -117,7 +114,7 @@ public class FileObjectController {
 
     private FileDto convertFileMetaDataToFileDto(HttpServletRequest request, FileMetadata fileMetadata){
         String baseUrl = getBaseUrl(request);
-        return new FileDto(fileMetadata.getId(), fileMetadata.getFileName(), fileMetadata.geteTag()
+        return new FileDto(fileMetadata.getId(), fileMetadata.getFileName()
                 , fileMetadata.getFileType(), fileMetadata.getFileSize()
                 , baseUrl + fileMetadata.getDownloadLink(), fileMetadata.getBucketName());
     }

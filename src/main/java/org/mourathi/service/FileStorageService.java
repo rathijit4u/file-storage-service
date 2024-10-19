@@ -20,10 +20,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Service
+
 public class FileStorageService implements IFileStorageService {
 
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final MinIOStorageUtil minIOStorageUtil = new MinIOStorageUtil();
     @Autowired
     FileRepository fileRepository;
