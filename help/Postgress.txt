@@ -1,3 +1,7 @@
+docker run --name my-postgres --env POSTGRES_PASSWORD=admin --volume postgres-volume:/var/lib/postgresql/data --publish 5432:5432 --detach postgres
+
 CREATE USER docker_user WITH PASSWORD 'docker_user';
+
+CREATE DATABASE file_metadata;
 
 GRANT ALL PRIVILEGES ON DATABASE file_metadata TO docker_user;
