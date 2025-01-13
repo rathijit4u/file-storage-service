@@ -1,9 +1,9 @@
 package org.mourathi.dto;
 
+import org.springframework.hateoas.RepresentationModel;
 import java.time.LocalDate;
-import java.util.Date;
 
-public class BucketDto {
+public class BucketDto extends RepresentationModel<BucketDto> {
     private String name;
     private LocalDate createdDate;
 

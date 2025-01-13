@@ -14,11 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/files")
@@ -66,7 +68,8 @@ public class FileObjectController {
     @GetMapping("/{objectId}")
     public ResponseEntity<FileDto> getFileMetadata(HttpServletRequest request, @PathVariable("objectId") String objectId) {
         return ResponseEntity.ok().body(convertFileMetaDataToFileDto(request
-                , fileStorageService.getFileMetadata(objectId)));
+                , fileStorageService.getFileMetadata(objectId))
+                .add(linkTo(methodOn(FileObjectController.class).getFileMetadata(request, objectId)).withSelfRel()));
     }
 
     @PutMapping("/{objectId}")
@@ -119,6 +122,8 @@ public class FileObjectController {
         String baseUrl = getBaseUrl(request);
         return new FileDto(fileMetadata.getId(), fileMetadata.getFileName(), fileMetadata.geteTag()
                 , fileMetadata.getFileType(), fileMetadata.getFileSize()
-                , baseUrl + fileMetadata.getDownloadLink(), fileMetadata.getBucketName());
+                , baseUrl + fileMetadata.getDownloadLink(), fileMetadata.getBucketName())
+                .add(linkTo(methodOn(FileObjectController.class)
+                        .getFileMetadata(request, fileMetadata.getId())).withSelfRel());
     }
 }

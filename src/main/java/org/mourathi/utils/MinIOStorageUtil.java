@@ -11,10 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MinIOStorageUtil {
 
@@ -155,6 +152,19 @@ public class MinIOStorageUtil {
     public void removeBucket(String name) {
         try {
             minioClient.removeBucket(RemoveBucketArgs.builder().bucket(name).build());
+        } catch (ErrorResponseException | XmlParserException | ServerException | NoSuchAlgorithmException |
+                 IOException | InvalidResponseException | InvalidKeyException | InternalException |
+                 InsufficientDataException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public Bucket getBucket(String name) {
+        try {
+            Optional<Bucket> optionalBucket = minioClient.listBuckets().stream()
+                    .filter(bucket -> bucket.name().equalsIgnoreCase(name))
+                    .findFirst();
+            return optionalBucket.orElse(null);
         } catch (ErrorResponseException | XmlParserException | ServerException | NoSuchAlgorithmException |
                  IOException | InvalidResponseException | InvalidKeyException | InternalException |
                  InsufficientDataException e) {

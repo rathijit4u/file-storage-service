@@ -1,7 +1,9 @@
 package org.mourathi.dto;
 
 
-public class FileDto {
+import org.springframework.hateoas.RepresentationModel;
+
+public class FileDto extends RepresentationModel<FileDto> {
 
     private String id;
     private String fileName;

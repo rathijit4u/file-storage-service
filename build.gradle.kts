@@ -18,7 +18,10 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.3.3")
     implementation("org.postgresql:postgresql:42.7.4")
     implementation("org.springframework.boot:spring-boot-starter-security:3.3.3")
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.code.gson:gson:2.11.0")
+    implementation("org.springframework.hateoas:spring-hateoas:2.4.1")
+
+
 
 
     compileOnly("org.projectlombok:lombok:1.18.34")

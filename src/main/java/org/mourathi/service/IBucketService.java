@@ -11,4 +11,6 @@ public interface IBucketService {
     void deleteBucket(String name);
 
     List<BucketDto> getAllBuckets();
+
+    BucketDto getBucket(String name) throws Exception;
 }

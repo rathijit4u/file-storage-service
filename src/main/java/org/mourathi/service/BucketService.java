@@ -33,4 +33,13 @@ public class BucketService implements IBucketService {
                 .map(bucket -> new BucketDto(bucket.name(), bucket.creationDate().toLocalDate()))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public BucketDto getBucket(String name) throws Exception {
+        Bucket bucket = minIOStorageUtil.getBucket(name);
+        if (bucket != null)
+            return new BucketDto(bucket.name(), bucket.creationDate().toLocalDate());
+        else
+            throw new Exception("Bucket - '" + name + "' not found");
+    }
 }

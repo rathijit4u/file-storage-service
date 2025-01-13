@@ -5,11 +5,16 @@ import org.mourathi.dto.BucketDto;
 import org.mourathi.service.FSUserDetailsService;
 import org.mourathi.service.IBucketService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/buckets")
@@ -30,9 +35,24 @@ public class BucketController {
         iBucketService.deleteBucket(name);
     }
 
+    @GetMapping("/{objectName}")
+    public ResponseEntity<BucketDto> getBucket(@PathVariable("objectName") String name) throws Exception {
+        return ResponseEntity.ok(iBucketService.getBucket(name)
+                .add(linkTo(methodOn(BucketController.class).getBucket(name)).withSelfRel()));
+    }
+
     @GetMapping
-    public ResponseEntity<List<BucketDto>> getAllBuckets(){
-        return ResponseEntity.ok(iBucketService.getAllBuckets());
+    public CollectionModel<BucketDto> getAllBuckets(){
+        List<BucketDto> bucketDtos = iBucketService.getAllBuckets().stream()
+                .map(bucketDto -> {
+                    try {
+                        return bucketDto.add(
+                                linkTo(methodOn(BucketController.class).getBucket(bucketDto.getName())).withSelfRel());
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                }).toList();
+        return CollectionModel.of(bucketDtos, linkTo(methodOn(BucketController.class).getAllBuckets()).withSelfRel());
     }
 
 }
