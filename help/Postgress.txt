@@ -5,3 +5,7 @@ CREATE USER docker_user WITH PASSWORD 'docker_user';
 CREATE DATABASE file_metadata;
 
 GRANT ALL PRIVILEGES ON DATABASE file_metadata TO docker_user;
+
+create schema fs;
+
+grant all on schema fs to docker_user;
