@@ -1,24 +1,28 @@
 package org.mourathi.service;
 
 
+import io.minio.GetObjectResponse;
 import org.mourathi.model.FileMetadata;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 public interface IFileStorageService {
     FileMetadata uploadFile(String requestUri, String bucket, MultipartFile file) throws IOException;
 
-    InputStream getFileStream(String objectId);
+    GetObjectResponse getFileStream(String fileName, String bucket);
 
     List<FileMetadata> getAllFileMetadata(int limit);
 
-    FileMetadata getFileMetadata(String objectId);
+    List<FileMetadata> getAllFileMetadataForBucket(String bucketName, int limit);
 
-    FileMetadata deleteFileObject(String objectId);
+    FileMetadata getFileMetadata(String bucketName, String fileName);
+
+    FileMetadata deleteFileObject(String bucketName, String fileName);
 
     FileMetadata updateFileMetadata(FileMetadata FileMetadata, String objectId);
+
+    String getPresignedUrl(String bucketName, String fileName);
 
 }

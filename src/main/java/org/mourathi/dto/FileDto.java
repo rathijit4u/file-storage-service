@@ -11,7 +11,8 @@ public class FileDto extends RepresentationModel<FileDto> {
     private String fileType;
     private long fileSize;
     private String downloadLink;
-    private String bucketName;
+
+    private BucketDto bucket;
 
     public FileDto() {
     }
@@ -25,14 +26,15 @@ public class FileDto extends RepresentationModel<FileDto> {
         this.downloadLink = downloadLink;
     }
 
-    public FileDto(String id, String fileName, String eTag, String fileType, long fileSize, String downloadLink, String bucketName) {
+    public FileDto(String id, String fileName, String eTag, String fileType, long fileSize, String downloadLink
+            , BucketDto bucket) {
         this.id = id;
         this.fileName = fileName;
         this.eTag = eTag;
         this.fileType = fileType;
         this.fileSize = fileSize;
         this.downloadLink = downloadLink;
-        this.bucketName = bucketName;
+        this.bucket = bucket;
     }
 
     public String getId() {
@@ -83,11 +85,11 @@ public class FileDto extends RepresentationModel<FileDto> {
         this.downloadLink = downloadLink;
     }
 
-    public String getBucketName() {
-        return bucketName;
+    public BucketDto getBucket() {
+        return bucket;
     }
 
-    public void setBucketName(String bucketName) {
-        this.bucketName = bucketName;
+    public void setBucket(BucketDto bucket) {
+        this.bucket = bucket;
     }
 }

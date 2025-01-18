@@ -1,8 +1,7 @@
 package org.mourathi.service;
 
+import io.minio.GetObjectResponse;
 import io.minio.ObjectWriteResponse;
-import io.minio.messages.Item;
-import org.mourathi.dto.FileDto;
 import org.mourathi.exception.FileObjectNotFoundException;
 import org.mourathi.model.FileMetadata;
 import org.mourathi.repository.FileRepository;
@@ -12,9 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -31,12 +28,10 @@ public class FileStorageService implements IFileStorageService {
     @Override
     public FileMetadata uploadFile(String requestUri, String bucket, MultipartFile file) throws IOException {
 
-        FileMetadata fileMetadata = null;
-
         ObjectWriteResponse objectWriteResponse =  minIOStorageUtil.uploadObject(file.getInputStream()
                 , file.getOriginalFilename(), file.getContentType(), file.getSize(), bucket);
 
-        fileMetadata = fileRepository.findByNameAndBucket(file.getOriginalFilename(), bucket);
+        FileMetadata fileMetadata = fileRepository.findByNameAndBucket(file.getOriginalFilename(), bucket);
         if(fileMetadata != null){
             fileMetadata.setFileSize(file.getSize());
             fileMetadata.setFileType(file.getContentType());
@@ -53,9 +48,8 @@ public class FileStorageService implements IFileStorageService {
     }
 
     @Override
-    public InputStream getFileStream(String id){
-        FileMetadata fileMetadata = this.getFileById(id);
-        return minIOStorageUtil.getObject(fileMetadata.getFileName(), fileMetadata.getBucketName());
+    public GetObjectResponse getFileStream(String fileName, String bucket){
+        return minIOStorageUtil.getObject(fileName, bucket);
     }
 
     @Override
@@ -74,15 +68,30 @@ public class FileStorageService implements IFileStorageService {
     }
 
     @Override
-    public FileMetadata getFileMetadata(String id) {
-        return this.getFileById(id);
+    public List<FileMetadata> getAllFileMetadataForBucket(String bucketName, int limit) {
+        List<FileMetadata> responses = new ArrayList<>();
+        int counter = 0;
+
+        for(FileMetadata fileMetadata: fileRepository.findAllByBucket(bucketName)){
+            if(counter > limit){
+                break;
+            }
+            responses.add(fileMetadata);
+            counter++;
+        }
+        return responses;
     }
 
     @Override
-    public FileMetadata deleteFileObject(String objectId){
-        FileMetadata fileMetadata = this.getFileById(objectId);
+    public FileMetadata getFileMetadata(String bucketName, String fileName) {
+        return fileRepository.findByNameAndBucket(fileName, bucketName);
+    }
+
+    @Override
+    public FileMetadata deleteFileObject(String bucketName, String fileName){
+        FileMetadata fileMetadata = fileRepository.findByNameAndBucket(fileName, bucketName);
         minIOStorageUtil.deleteObject(fileMetadata.getFileName(), fileMetadata.getBucketName());
-        fileRepository.deleteById(objectId);
+        fileRepository.deleteById(fileMetadata.getId());
         return fileMetadata;
     }
 
@@ -93,12 +102,8 @@ public class FileStorageService implements IFileStorageService {
         return fileMetadata;
     }
 
-
-
-
-    private FileMetadata getFileById(String id){
-        Optional<FileMetadata> optionalFileMetadata = fileRepository.findById(id);
-        return optionalFileMetadata
-                .orElseThrow(()-> new FileObjectNotFoundException("No file object found with id - " + id));
+    @Override
+    public String getPresignedUrl(String bucketName, String fileName) {
+        return minIOStorageUtil.getPresignedUrl(bucketName, fileName);
     }
 }

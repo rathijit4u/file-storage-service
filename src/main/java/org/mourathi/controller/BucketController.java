@@ -36,9 +36,15 @@ public class BucketController {
     }
 
     @GetMapping("/{objectName}")
-    public ResponseEntity<BucketDto> getBucket(@PathVariable("objectName") String name) throws Exception {
-        return ResponseEntity.ok(iBucketService.getBucket(name)
-                .add(linkTo(methodOn(BucketController.class).getBucket(name)).withSelfRel()));
+    public ResponseEntity<BucketDto> getBucket(@PathVariable("objectName") String name) {
+
+        try {
+            BucketDto bucketDto = iBucketService.getBucket(name);
+            return ResponseEntity.ok(bucketDto
+                    .add(linkTo(methodOn(BucketController.class).getBucket(name)).withSelfRel()));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping

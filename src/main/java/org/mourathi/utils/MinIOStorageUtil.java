@@ -2,8 +2,8 @@ package org.mourathi.utils;
 
 import io.minio.*;
 import io.minio.errors.*;
+import io.minio.http.Method;
 import io.minio.messages.Bucket;
-import io.minio.messages.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,11 +12,11 @@ import java.io.InputStream;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class MinIOStorageUtil {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-    public static final String BUCKET_NAME = "asiatrip";
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     public static final String MINIO_SERVER_URL = "http://localhost:9000";
 
     private final MinioClient minioClient;
@@ -29,8 +29,7 @@ public class MinIOStorageUtil {
                         .build();
     }
 
-    public ObjectWriteResponse uploadObject(InputStream inputStream, String fileName, String contentType, long size, String bucketName)
-            throws IOException {
+    public ObjectWriteResponse uploadObject(InputStream inputStream, String fileName, String contentType, long size, String bucketName) {
 
         try {
             // Upload input stream with headers and user metadata.
@@ -51,21 +50,7 @@ public class MinIOStorageUtil {
         }
     }
 
-    public void downloadObject(String objectName, String outputFileName, String bucketName) {
-        // Download object given the bucket, object name and output file name
-        try {
-            minioClient.downloadObject(
-                    DownloadObjectArgs.builder()
-                            .bucket(bucketName)
-                            .object(objectName)
-                            .filename(outputFileName)
-                            .build());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public InputStream getObject(String objectName, String bucketName) {
+    public GetObjectResponse getObject(String objectName, String bucketName) {
         try {
             // Read data from stream
             return minioClient.getObject(
@@ -73,44 +58,6 @@ public class MinIOStorageUtil {
                             .bucket(bucketName)
                             .object(objectName)
                             .build());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public List<Item> getAllObjectItems(String bucketName){
-
-        List<Item> items = new ArrayList<>();
-
-        try {
-            Iterable<Result<Item>> results = minioClient.listObjects(
-                    ListObjectsArgs.builder().bucket(BUCKET_NAME).recursive(true).build());
-
-            for(Result<Item> result :results){
-                items.add(result.get());
-            }
-            return items;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Item getObjectItem(String objectName, String bucketName){
-
-        List<Item> items = new ArrayList<>();
-
-        try {
-            Iterable<Result<Item>> results = minioClient.listObjects(
-                    ListObjectsArgs.builder().bucket(bucketName).recursive(true).build());
-
-
-            for(Result<Item> result :results){
-                Item item = result.get();
-                if(item.objectName().equalsIgnoreCase(objectName)){
-                    return result.get();
-                }
-            }
-            return null;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -172,6 +119,19 @@ public class MinIOStorageUtil {
         }
     }
 
+    public String getPresignedUrl(String bucketName, String fileName){
+        GetPresignedObjectUrlArgs getPresignedObjectUrlArgs = GetPresignedObjectUrlArgs.builder()
+                .bucket(bucketName).object(fileName).method(Method.PUT)
+                .expiry(1, TimeUnit.DAYS).build();
+        try {
+            return minioClient.getPresignedObjectUrl(getPresignedObjectUrlArgs);
+        } catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException |
+                 InvalidResponseException | IOException | NoSuchAlgorithmException | XmlParserException |
+                 ServerException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
     private boolean isBucketExists(String name) {
         try {
             return minioClient.bucketExists(BucketExistsArgs.builder().bucket(name).build());

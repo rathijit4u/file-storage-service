@@ -107,6 +107,7 @@ public class FileMetadata {
 
     @PostLoad
     private void postLoad(){
-        this.setDownloadLink("/api/files/" + this.getId() + "/file");
+        this.setDownloadLink("/api/files/" + this.getBucketName()
+                + "/" + this.getFileName() + "/file");
     }
 }

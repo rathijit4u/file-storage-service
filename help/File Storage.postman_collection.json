@@ -1,0 +1,334 @@
+{
+	"info": {
+		"_postman_id": "8e396b3a-07e4-47e0-9e5d-2d34dd74f4af",
+		"name": "File Storage",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "40944635"
+	},
+	"item": [
+		{
+			"name": "CreateBucket",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-API-KEY",
+						"value": "test123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/buckets?name=test2",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"buckets"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "test2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Upload Url",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-API-KEY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/files/presignedurl/upload?bucket_name=test&file_name=yy.txt",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"files",
+						"presignedurl",
+						"upload"
+					],
+					"query": [
+						{
+							"key": "bucket_name",
+							"value": "test"
+						},
+						{
+							"key": "file_name",
+							"value": "yy.txt"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Files metadata",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-API-KEY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/files/test?limit=10",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"files",
+						"test"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload File",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-API-KEY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/rjs/Downloads/pexels-chokniti-khongchum-1197604-2280547.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/files/test/upload?file",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"files",
+						"test",
+						"upload"
+					],
+					"query": [
+						{
+							"key": "file",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Download a file",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-API-KEY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/files/test/yy.txt/file",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"files",
+						"test",
+						"yy.txt",
+						"file"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get single file metadata",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-API-KEY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/files/test/yy.txt",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"files",
+						"test",
+						"yy.txt"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update file metadata",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-API-KEY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"f8c71625-882d-44a8-bb4c-c623ce1a6655\",\r\n    \"fileName\": \"pexels-chokniti-khongchum-1197604-2280547.jpg\",\r\n    \"eTag\": \"52edf9e8a017bb28f16b883048651091\",\r\n    \"fileType\": \"image/jpeg\",\r\n    \"fileSize\": 1234628,\r\n    \"downloadLink\": \"http://localhost:8080/api/files/f8c71625-882d-44a8-bb4c-c623ce1a6655/file\",\r\n    \"bucketName\": \"test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/files/f8c71625-882d-44a8-bb4c-c623ce1a6655",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"files",
+						"f8c71625-882d-44a8-bb4c-c623ce1a6655"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Buckets",
+			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "test123",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "X-API-KEY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/buckets",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"buckets"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
