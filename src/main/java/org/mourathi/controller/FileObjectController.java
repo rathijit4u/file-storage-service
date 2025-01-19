@@ -41,7 +41,7 @@ public class FileObjectController {
         return getFileDto(request, bucket, file);
     }
 
-    @PostMapping("/{bucket}/bulkupload")
+        @PostMapping("/{bucket}/bulkupload")
     public ResponseEntity<List<FileDto>> uploadMultipleFiles(HttpServletRequest request
             , @PathVariable("bucket") String bucket, @RequestParam("files") MultipartFile[] files) throws Exception {
         List<FileDto> responses = new ArrayList<>();

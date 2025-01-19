@@ -25,8 +25,10 @@ public class BucketController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createBucket(@RequestParam("name") String name){
-        iBucketService.createBucket(name);
+    public ResponseEntity<BucketDto> createBucket(@RequestParam("name") String name) throws Exception {
+        BucketDto bucketDto = iBucketService.createBucket(name);
+        return ResponseEntity.ok(bucketDto
+                .add(linkTo(methodOn(BucketController.class).getBucket(name)).withSelfRel()));
     }
 
     @DeleteMapping("/{objectName}")

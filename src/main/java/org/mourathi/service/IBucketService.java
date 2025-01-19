@@ -6,7 +6,7 @@ import org.mourathi.dto.BucketDto;
 import java.util.List;
 
 public interface IBucketService {
-    void createBucket(String name);
+    BucketDto createBucket(String name) throws Exception;
 
     void deleteBucket(String name);
 

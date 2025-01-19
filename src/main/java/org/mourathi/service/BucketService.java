@@ -17,8 +17,10 @@ public class BucketService implements IBucketService {
     private final MinIOStorageUtil minIOStorageUtil = new MinIOStorageUtil();
 
     @Override
-    public void createBucket(String name){
+    public BucketDto createBucket(String name) throws Exception {
         minIOStorageUtil.makeBucket(name);
+
+        return this.getBucket(name);
     }
 
     @Override

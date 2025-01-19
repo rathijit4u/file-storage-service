@@ -29,6 +29,8 @@ public class SecurityConfiguration {
     @Autowired
     APIKeyAuthFilter apiKeyAuthFilter;
 
+    @Autowired CustomCorsConfiguration customCorsConfiguration;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
@@ -37,6 +39,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(c -> c.configurationSource(customCorsConfiguration))
                 .addFilterBefore(apiKeyAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
