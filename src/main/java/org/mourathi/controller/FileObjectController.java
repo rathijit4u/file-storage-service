@@ -41,7 +41,7 @@ public class FileObjectController {
         return getFileDto(request, bucket, file);
     }
 
-        @PostMapping("/{bucket}/bulkupload")
+    @PostMapping("/{bucket}/bulkupload")
     public ResponseEntity<List<FileDto>> uploadMultipleFiles(HttpServletRequest request
             , @PathVariable("bucket") String bucket, @RequestParam("files") MultipartFile[] files) throws Exception {
         List<FileDto> responses = new ArrayList<>();
@@ -53,9 +53,15 @@ public class FileObjectController {
     }
 
     @GetMapping("/presignedurl/upload")
-    public ResponseEntity<String> getPresignedUrl(@RequestParam("bucket_name") String bucketName,
-                                @RequestParam("file_name") String fileName) throws IOException {
-       return ResponseEntity.ok().body(fileStorageService.getPresignedUrl(bucketName, fileName));
+    public ResponseEntity<String> getPresignedUploadUrl(@RequestParam("bucket_name") String bucketName,
+                                @RequestParam("file_name") String fileName) {
+       return ResponseEntity.ok().body(fileStorageService.getPresignedUploadUrl(bucketName, fileName));
+    }
+
+    @GetMapping("/presignedurl/download")
+    public ResponseEntity<String> getPresignedDownloadUrl(@RequestParam("bucket_name") String bucketName,
+                                                  @RequestParam("file_name") String fileName) {
+        return ResponseEntity.ok().body(fileStorageService.getPresignedDownloadUrl(bucketName, fileName));
     }
 
     @GetMapping("/{bucket}/{fileName}/file")
@@ -144,13 +150,14 @@ public class FileObjectController {
 
     private FileDto convertFileMetaDataToFileDto(HttpServletRequest request, FileMetadata fileMetadata) throws Exception {
         String baseUrl = getBaseUrl(request);
+        String downloadLink = baseUrl + fileMetadata.getDownloadLink();
         BucketDto bucketDto = new BucketDto(fileMetadata.getBucketName(), null)
                 .add(linkTo(methodOn(BucketController.class)
                         .getBucket(fileMetadata.getBucketName())).withSelfRel());
         return new FileDto(fileMetadata.getId(), fileMetadata.getFileName(), fileMetadata.geteTag()
                 , fileMetadata.getFileType(), fileMetadata.getFileSize()
-                , baseUrl + fileMetadata.getDownloadLink(), bucketDto)
+                , fileStorageService.getPresignedDownloadUrl(fileMetadata.getBucketName(), fileMetadata.getFileName()), bucketDto)
                 .add(linkTo(methodOn(FileObjectController.class)
-                        .getFileMetadata(request, fileMetadata.getBucketName(), fileMetadata.getId())).withSelfRel());
+                        .getFileMetadata(request, fileMetadata.getBucketName(), fileMetadata.getFileName())).withSelfRel());
     }
 }

@@ -119,10 +119,12 @@ public class MinIOStorageUtil {
         }
     }
 
-    public String getPresignedUrl(String bucketName, String fileName){
+    public String getPresignedDownloadUrl(String bucketName, String fileName){
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("response-content-disposition", "attachment; filename=\"" + fileName + "\"");
         GetPresignedObjectUrlArgs getPresignedObjectUrlArgs = GetPresignedObjectUrlArgs.builder()
-                .bucket(bucketName).object(fileName).method(Method.PUT)
-                .expiry(1, TimeUnit.DAYS).build();
+                .bucket(bucketName).object(fileName).method(Method.GET)
+                .expiry(1, TimeUnit.DAYS).extraQueryParams(queryParams).build();
         try {
             return minioClient.getPresignedObjectUrl(getPresignedObjectUrlArgs);
         } catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException |
@@ -130,8 +132,23 @@ public class MinIOStorageUtil {
                  ServerException e) {
             throw new RuntimeException(e);
         }
-
     }
+
+    public String getPresignedUploadUrl(String bucketName, String fileName){
+        Map<String, String> queryParams = new HashMap<>();
+        queryParams.put("response-content-disposition", "attachment; filename=\"" + fileName + "\"");
+        GetPresignedObjectUrlArgs getPresignedObjectUrlArgs = GetPresignedObjectUrlArgs.builder()
+                .bucket(bucketName).object(fileName).method(Method.PUT)
+                .expiry(1, TimeUnit.DAYS).extraQueryParams(queryParams).build();
+        try {
+            return minioClient.getPresignedObjectUrl(getPresignedObjectUrlArgs);
+        } catch (ErrorResponseException | InsufficientDataException | InternalException | InvalidKeyException |
+                 InvalidResponseException | IOException | NoSuchAlgorithmException | XmlParserException |
+                 ServerException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private boolean isBucketExists(String name) {
         try {
             return minioClient.bucketExists(BucketExistsArgs.builder().bucket(name).build());

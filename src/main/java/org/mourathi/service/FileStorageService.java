@@ -101,7 +101,13 @@ public class FileStorageService implements IFileStorageService {
     }
 
     @Override
-    public String getPresignedUrl(String bucketName, String fileName) {
-        return minIOStorageUtil.getPresignedUrl(bucketName, fileName);
+    public String getPresignedUploadUrl(String bucketName, String fileName) {
+        return minIOStorageUtil.getPresignedUploadUrl(bucketName, fileName);
     }
+
+    @Override
+    public String getPresignedDownloadUrl(String bucketName, String fileName) {
+        return minIOStorageUtil.getPresignedDownloadUrl(bucketName, fileName);
+    }
+
 }

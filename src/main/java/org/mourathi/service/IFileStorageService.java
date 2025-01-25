@@ -23,6 +23,7 @@ public interface IFileStorageService {
 
     FileMetadata updateFileMetadata(FileMetadata FileMetadata, String objectId);
 
-    String getPresignedUrl(String bucketName, String fileName);
+    String getPresignedUploadUrl(String bucketName, String fileName);
 
+    String getPresignedDownloadUrl(String bucketName, String fileName);
 }
