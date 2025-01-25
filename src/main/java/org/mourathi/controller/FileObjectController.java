@@ -73,11 +73,14 @@ public class FileObjectController {
     @GetMapping("/{bucket}")
     public CollectionModel<FileDto> getAllFileMetadata(HttpServletRequest request
                                                     ,@PathVariable("bucket") String bucket
-                                        ,@RequestParam("limit") Optional<Integer> optionalLimit)
+                                        ,@RequestParam(name = "page", defaultValue = "0") int page,
+                                                       @RequestParam(name = "size", defaultValue = "10") int size
+                                            ,@RequestParam(name="sort", defaultValue = "fileName") String sortField
+                                            ,@RequestParam(name = "order", defaultValue = "asc") String sortOrder)
             throws Exception {
         return CollectionModel.of((convertFileMetadataList(request,
-                        fileStorageService.getAllFileMetadataForBucket(bucket, optionalLimit.orElse(Integer.MAX_VALUE)))),
-                linkTo(methodOn(FileObjectController.class).getAllFileMetadata(request, bucket, optionalLimit)).withSelfRel());
+                        fileStorageService.getAllFileMetadataForBucket(bucket, page, size, sortField, sortOrder))),
+                linkTo(methodOn(FileObjectController.class).getAllFileMetadata(request, bucket, page, size, sortField, sortOrder)).withSelfRel());
     }
 
     @GetMapping("/{bucket}/{objectId}")
@@ -95,7 +98,7 @@ public class FileObjectController {
     public ResponseEntity<FileDto> updateFileMetadata(HttpServletRequest request, @RequestBody FileDto fileDto,
                                                       @PathVariable("objectId") String objectId) throws Exception {
 
-        FileMetadata fileMetadata = fileStorageService.getFileMetadata(fileDto.getBucket().getName(), fileDto.getId());
+        FileMetadata fileMetadata = fileStorageService.getFileMetadata(fileDto.getBucket().getName(), fileDto.getFileName());
         fileMetadata.setFileType(fileDto.getFileType());
         fileMetadata.seteTag(fileDto.geteTag());
         fileMetadata.setFileName(fileDto.getFileName());

@@ -15,7 +15,7 @@ public interface IFileStorageService {
 
     List<FileMetadata> getAllFileMetadata(int limit);
 
-    List<FileMetadata> getAllFileMetadataForBucket(String bucketName, int limit);
+    List<FileMetadata> getAllFileMetadataForBucket(String bucketName, int page, int size, String sort, String sortOrder);
 
     FileMetadata getFileMetadata(String bucketName, String fileName);
 

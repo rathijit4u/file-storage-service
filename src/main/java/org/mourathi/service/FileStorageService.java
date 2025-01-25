@@ -9,8 +9,12 @@ import org.mourathi.utils.MinIOStorageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.awt.print.Pageable;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -68,18 +72,12 @@ public class FileStorageService implements IFileStorageService {
     }
 
     @Override
-    public List<FileMetadata> getAllFileMetadataForBucket(String bucketName, int limit) {
-        List<FileMetadata> responses = new ArrayList<>();
-        int counter = 0;
+    public List<FileMetadata> getAllFileMetadataForBucket(String bucketName, int page, int size, String sortField, String sortOrder) {
+        Sort sort = sortOrder.equalsIgnoreCase("desc") ? Sort.by(Sort.Order.desc(sortField)) :
+                Sort.by(Sort.Order.asc(sortField)) ;
 
-        for(FileMetadata fileMetadata: fileRepository.findAllByBucket(bucketName)){
-            if(counter > limit){
-                break;
-            }
-            responses.add(fileMetadata);
-            counter++;
-        }
-        return responses;
+        return fileRepository.findAllByBucketName(bucketName,
+                PageRequest.of(page, size, sort));
     }
 
     @Override
