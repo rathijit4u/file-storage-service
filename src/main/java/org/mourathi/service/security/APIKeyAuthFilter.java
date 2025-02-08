@@ -1,4 +1,4 @@
-package org.mourathi.service;
+package org.mourathi.service.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -48,5 +48,7 @@ public class APIKeyAuthFilter extends GenericFilterBean {
 
         filterChain.doFilter(servletRequest, servletResponse);
     }
+
+
 
 }

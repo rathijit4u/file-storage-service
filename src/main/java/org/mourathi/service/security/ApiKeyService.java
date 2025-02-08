@@ -1,4 +1,4 @@
-package org.mourathi.service;
+package org.mourathi.service.security;
 
 import org.mourathi.model.APIKey;
 import org.mourathi.repository.ApiRepository;

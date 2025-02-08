@@ -18,6 +18,8 @@ public class FileMetadata {
     private long fileSize;
     private String downloadLink;
     private String bucketName;
+    private long chunkSize;
+    private String httpContentType;
     private Date created;
     private Date updated;
 
@@ -103,6 +105,22 @@ public class FileMetadata {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
+    }
+
+    public String getHttpContentType() {
+        return httpContentType;
+    }
+
+    public void setHttpContentType(String httpContentType) {
+        this.httpContentType = httpContentType;
+    }
+
+    public long getChunkSize() {
+        return chunkSize;
+    }
+
+    public void setChunkSize(long chunkSize) {
+        this.chunkSize = chunkSize;
     }
 
     @PostLoad

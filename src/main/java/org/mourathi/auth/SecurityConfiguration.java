@@ -1,7 +1,7 @@
 package org.mourathi.auth;
 
-import org.mourathi.service.APIKeyAuthFilter;
-import org.mourathi.service.FSUserDetailsService;
+import org.mourathi.service.security.APIKeyAuthFilter;
+import org.mourathi.service.s3.BucketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfiguration {
 
     @Autowired
-    private FSUserDetailsService userDetailsService;
+    private BucketService.FSUserDetailsService userDetailsService;
 
     @Autowired
     private RestAuthenticationEntryPoint authenticationEntryPoint;
@@ -35,7 +35,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
                         .anyRequest().authenticated())
-                .httpBasic(hb -> hb.authenticationEntryPoint(authenticationEntryPoint))
+                //.httpBasic(hb -> hb.authenticationEntryPoint(authenticationEntryPoint))
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(httpSecuritySessionManagementConfigurer ->
                         httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -67,4 +67,6 @@ public class SecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 }

@@ -12,7 +12,6 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-web:3.3.2")
-    implementation("io.nats:jnats:2.20.0")
     implementation("org.springframework.boot:spring-boot-starter-tomcat")
     implementation("io.minio:minio:8.5.12")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:3.3.3")
@@ -23,7 +22,10 @@ dependencies {
 
 
 
+    // https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly("org.projectlombok:lombok:1.18.36")
 
+    annotationProcessor("org.projectlombok:lombok:1.18.36")
     compileOnly("org.projectlombok:lombok:1.18.34")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))

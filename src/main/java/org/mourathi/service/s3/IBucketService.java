@@ -1,6 +1,5 @@
-package org.mourathi.service;
+package org.mourathi.service.s3;
 
-import org.jetbrains.annotations.NotNull;
 import org.mourathi.dto.BucketDto;
 
 import java.util.List;

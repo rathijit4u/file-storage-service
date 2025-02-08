@@ -1,4 +1,4 @@
-package org.mourathi.service;
+package org.mourathi.service.s3;
 
 
 import io.minio.GetObjectResponse;

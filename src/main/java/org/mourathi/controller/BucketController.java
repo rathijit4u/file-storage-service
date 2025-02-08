@@ -1,12 +1,9 @@
 package org.mourathi.controller;
 
-import io.minio.messages.Bucket;
 import org.mourathi.dto.BucketDto;
-import org.mourathi.service.FSUserDetailsService;
-import org.mourathi.service.IBucketService;
+import org.mourathi.service.s3.IBucketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +11,6 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/buckets")

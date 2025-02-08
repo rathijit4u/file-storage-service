@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.mourathi.dto.BucketDto;
 import org.mourathi.dto.FileDto;
 import org.mourathi.model.FileMetadata;
-import org.mourathi.service.IFileStorageService;
+import org.mourathi.service.s3.IFileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -21,7 +21,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
