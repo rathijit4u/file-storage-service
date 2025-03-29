@@ -1,6 +1,9 @@
 plugins {
     id("java")
+    id("org.springframework.boot") version "3.4.4"
 }
+
+apply(plugin = "io.spring.dependency-management")
 
 group = "org.example"
 version = "1.0-SNAPSHOT"
@@ -36,8 +39,4 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.withType<Jar> {
-    manifest {
-        attributes["Main-Class"] = "org.mourathi.FileStorage"
-    }
-}
+
