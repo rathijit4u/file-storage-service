@@ -1,4 +1,12 @@
 services:
+  nginx-proxy:
+    container_name: nginx
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
   postgres_db:
     image: postgres
     container_name: postgres_db
@@ -19,6 +27,8 @@ services:
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
+      VIRTUAL_HOST: minio.proj.local
+      VIRTUAL_PORT: 9000
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -31,6 +41,17 @@ services:
       context: .
     ports:
       - "8080:8080"
+    environment:
+      spring.datasource.url: "jdbc:postgresql://postgres_db/file_metadata"
+      minio.access-key: minioadmin
+      minio.secret-key: minioadmin
+      minio.url: "http://minio:9000"
+      VIRTUAL_HOST: fileserver.proj.local
+      VIRTUAL_PORT: 8080
+    depends_on:
+      - postgres_db
+      - minio
+      - nginx-proxy
 
 volumes:
   postgres-volume:
